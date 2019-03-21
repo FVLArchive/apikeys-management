@@ -1,0 +1,29 @@
+{
+  "name": "@fvlab/apikeys-management",
+  "version": "1.0.2",
+  "description": "Management of api-keys using a provided configuration store",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FairVenturesLab/apikeys-management.git"
+  },
+  "author": "FVLab",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/FairVenturesLab/apikeys-management/issues"
+  },
+  "homepage": "https://github.com/FairVenturesLab/apikeys-management#readme",
+  "devDependencies": {
+    "tslint": "^5.8.0",
+    "typescript": "^2.5.3"
+  },
+  "dependencies": {
+    "@fvlab/configurationstore": "^1.0.2",
+    "uuid": "^3.3.2"
+  }
+}
