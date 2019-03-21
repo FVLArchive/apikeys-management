@@ -1,5 +1,4 @@
 import { IConfigurationStore } from '@fvlab/configurationstore';
-import { Request } from 'express';
 /**
  * API Key metadata
  *
@@ -48,7 +47,7 @@ export declare class APIKeyManager {
      * @returns {Promise<APIKeyInfo>}
      * @memberof APIKeyManager
      */
-    withExistingKey(request: Request): Promise<APIKeyInfo>;
+    withExistingKey(request: any): Promise<APIKeyInfo>;
     /**
      * Check that the request has a valid api key registered
      *
@@ -56,7 +55,7 @@ export declare class APIKeyManager {
      * @returns {Promise<APIKeyInfo>}
      * @memberof APIKeyManager
      */
-    withValidKey(request: Request): Promise<APIKeyInfo>;
+    withValidKey(request: any): Promise<APIKeyInfo>;
     /**
      * Generates and returns a unique api key
      *

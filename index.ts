@@ -1,6 +1,5 @@
 import { IConfigurationStore } from '@fvlab/configurationstore';
 import uuidv1 from 'uuid/v1';
-import { Request } from 'express';
 
 /**
  * API Key metadata
@@ -53,8 +52,8 @@ export class APIKeyManager {
    * @returns {Promise<APIKeyInfo>}
    * @memberof APIKeyManager
    */
-  withExistingKey(request: Request): Promise<APIKeyInfo> {
-    const key = request.headers[this.requestHeaderKey];
+  withExistingKey(request: any): Promise<APIKeyInfo> {
+    const key = request && request.headers && request.headers[this.requestHeaderKey];
     if (key)
       return this.getKeyInfo(key.trim()).then(keyInfo => {
         if (this.status(keyInfo) !== KeyStatus.DoesNotExist) return keyInfo;
@@ -70,7 +69,7 @@ export class APIKeyManager {
    * @returns {Promise<APIKeyInfo>}
    * @memberof APIKeyManager
    */
-  withValidKey(request: Request): Promise<APIKeyInfo> {
+  withValidKey(request: any): Promise<APIKeyInfo> {
     return this.withExistingKey(request).then(keyInfo => {
       if (this.status(keyInfo) === KeyStatus.Valid) return keyInfo;
       throw new Error('API key is invalid');

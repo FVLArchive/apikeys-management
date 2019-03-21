@@ -1,6 +1,6 @@
 {
   "name": "@fvlab/apikeys-management",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Management of api-keys using a provided configuration store",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -24,7 +24,6 @@
   },
   "dependencies": {
     "@fvlab/configurationstore": "^1.0.2",
-    "express": "^4.16.4",
     "uuid": "^3.3.2"
   }
 }

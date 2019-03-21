@@ -55,7 +55,7 @@ var APIKeyManager = /** @class */ (function () {
      */
     APIKeyManager.prototype.withExistingKey = function (request) {
         var _this = this;
-        var key = request.headers[this.requestHeaderKey];
+        var key = request && request.headers && request.headers[this.requestHeaderKey];
         if (key)
             return this.getKeyInfo(key.trim()).then(function (keyInfo) {
                 if (_this.status(keyInfo) !== KeyStatus.DoesNotExist)
