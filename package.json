@@ -1,6 +1,6 @@
 {
   "name": "@fvlab/apikeys-management",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Management of api-keys using a provided configuration store",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

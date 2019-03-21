@@ -28,7 +28,7 @@ export enum KeyStatus {
   Valid
 }
 
-const APIKEYS_PREFIX = 'ApiKeys';
+const APIKEYS_PREFIX = 'APIKeys';
 
 /**
  * Manages the set of api keys and their associated metadata, using the given configuration storage as storage.
@@ -43,7 +43,7 @@ export class APIKeyManager {
    * @param {string} [requestHeaderKey='X-APIKEY'] The header element to look for the api key
    * @memberof APIKeyManager
    */
-  constructor(private config: IConfigurationStore, private requestHeaderKey = 'X-APIKEY') {}
+  constructor(private config: IConfigurationStore, private requestHeaderKey = 'x-api-key') {}
 
   /**
    * Check that the request has an existing api key registered

@@ -27,7 +27,7 @@ var KeyStatus;
     KeyStatus[KeyStatus["Expired"] = 2] = "Expired";
     KeyStatus[KeyStatus["Valid"] = 3] = "Valid";
 })(KeyStatus = exports.KeyStatus || (exports.KeyStatus = {}));
-var APIKEYS_PREFIX = 'ApiKeys';
+var APIKEYS_PREFIX = 'APIKeys';
 /**
  * Manages the set of api keys and their associated metadata, using the given configuration storage as storage.
  *
@@ -42,7 +42,7 @@ var APIKeyManager = /** @class */ (function () {
      * @memberof APIKeyManager
      */
     function APIKeyManager(config, requestHeaderKey) {
-        if (requestHeaderKey === void 0) { requestHeaderKey = 'X-APIKEY'; }
+        if (requestHeaderKey === void 0) { requestHeaderKey = 'x-api-key'; }
         this.config = config;
         this.requestHeaderKey = requestHeaderKey;
     }
