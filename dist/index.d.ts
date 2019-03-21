@@ -1,4 +1,5 @@
 import { IConfigurationStore } from '@fvlab/configurationstore';
+import { Request } from 'express';
 /**
  * API Key metadata
  *
@@ -32,7 +33,30 @@ export declare enum KeyStatus {
  */
 export declare class APIKeyManager {
     private config;
-    constructor(config: IConfigurationStore);
+    private requestHeaderKey;
+    /**
+     *Creates an instance of APIKeyManager.
+     * @param {IConfigurationStore} config The configuration store to use for storing registered api key information
+     * @param {string} [requestHeaderKey='X-APIKEY'] The header element to look for the api key
+     * @memberof APIKeyManager
+     */
+    constructor(config: IConfigurationStore, requestHeaderKey?: string);
+    /**
+     * Check that the request has an existing api key registered
+     *
+     * @param {Request} request
+     * @returns {Promise<APIKeyInfo>}
+     * @memberof APIKeyManager
+     */
+    withExistingKey(request: Request): Promise<APIKeyInfo>;
+    /**
+     * Check that the request has a valid api key registered
+     *
+     * @param {Request} request
+     * @returns {Promise<APIKeyInfo>}
+     * @memberof APIKeyManager
+     */
+    withValidKey(request: Request): Promise<APIKeyInfo>;
     /**
      * Generates and returns a unique api key
      *
@@ -64,7 +88,7 @@ export declare class APIKeyManager {
      * @returns {Promise<KeyStatus>}
      * @memberof APIKeyManager
      */
-    status(key: string): Promise<KeyStatus>;
+    status(info: APIKeyInfo): KeyStatus;
     /**
      * Retrieves the meta data for a given api key
      *
@@ -73,6 +97,6 @@ export declare class APIKeyManager {
      * @returns {Promise<APIKeyInfo>}
      * @memberof APIKeyManager
      */
-    private getKeyInfo;
+    getKeyInfo(key: string): Promise<APIKeyInfo>;
     private getDBKey;
 }

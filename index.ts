@@ -1,5 +1,6 @@
 import { IConfigurationStore } from '@fvlab/configurationstore';
 import uuidv1 from 'uuid/v1';
+import { Request } from 'express';
 
 /**
  * API Key metadata
@@ -27,6 +28,7 @@ export enum KeyStatus {
   Expired,
   Valid
 }
+
 const APIKEYS_PREFIX = 'ApiKeys';
 
 /**
@@ -36,7 +38,44 @@ const APIKEYS_PREFIX = 'ApiKeys';
  * @class APIKeyManager
  */
 export class APIKeyManager {
-  constructor(private config: IConfigurationStore) {}
+  /**
+   *Creates an instance of APIKeyManager.
+   * @param {IConfigurationStore} config The configuration store to use for storing registered api key information
+   * @param {string} [requestHeaderKey='X-APIKEY'] The header element to look for the api key
+   * @memberof APIKeyManager
+   */
+  constructor(private config: IConfigurationStore, private requestHeaderKey = 'X-APIKEY') {}
+
+  /**
+   * Check that the request has an existing api key registered
+   *
+   * @param {Request} request
+   * @returns {Promise<APIKeyInfo>}
+   * @memberof APIKeyManager
+   */
+  withExistingKey(request: Request): Promise<APIKeyInfo> {
+    const key = request.headers[this.requestHeaderKey];
+    if (key)
+      return this.getKeyInfo(key.trim()).then(keyInfo => {
+        if (this.status(keyInfo) !== KeyStatus.DoesNotExist) return keyInfo;
+        throw new Error('API Key does not exist');
+      });
+    throw new Error('API key was not specified in request header');
+  }
+
+  /**
+   * Check that the request has a valid api key registered
+   *
+   * @param {Request} request
+   * @returns {Promise<APIKeyInfo>}
+   * @memberof APIKeyManager
+   */
+  withValidKey(request: Request): Promise<APIKeyInfo> {
+    return this.withExistingKey(request).then(keyInfo => {
+      if (this.status(keyInfo) === KeyStatus.Valid) return keyInfo;
+      throw new Error('API key is invalid');
+    });
+  }
 
   /**
    * Generates and returns a unique api key
@@ -82,15 +121,13 @@ export class APIKeyManager {
    * @returns {Promise<KeyStatus>}
    * @memberof APIKeyManager
    */
-  status(key: string): Promise<KeyStatus> {
-    return this.getKeyInfo(key).then(info => {
-      if (info && info.issuee) {
-        if (!info.isActive) return KeyStatus.Inactive;
-        if (info.expiryDate && info.expiryDate < new Date()) return KeyStatus.Expired;
-        return KeyStatus.Valid;
-      }
-      return KeyStatus.DoesNotExist;
-    });
+  status(info: APIKeyInfo): KeyStatus {
+    if (info && info.issuee) {
+      if (!info.isActive) return KeyStatus.Inactive;
+      if (info.expiryDate && info.expiryDate < new Date()) return KeyStatus.Expired;
+      return KeyStatus.Valid;
+    }
+    return KeyStatus.DoesNotExist;
   }
 
   /**
@@ -101,7 +138,7 @@ export class APIKeyManager {
    * @returns {Promise<APIKeyInfo>}
    * @memberof APIKeyManager
    */
-  private getKeyInfo(key: string): Promise<APIKeyInfo> {
+  getKeyInfo(key: string): Promise<APIKeyInfo> {
     return this.config.getGlobalData(this.getDBKey(key));
   }
 
